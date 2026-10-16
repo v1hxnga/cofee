@@ -3,17 +3,19 @@ import {ScrollTrigger} from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 import {createBeans} from './beans.js';
 import {createRitual} from './ritual-timeline.js';
+import {createEditorialMotion} from './editorial-motion.js';
 
 gsap.registerPlugin(ScrollTrigger);
+ScrollTrigger.config({ignoreMobileResize:true});
 const $=(s,root=document)=>root.querySelector(s),$$=(s,root=document)=>[...root.querySelectorAll(s)];
 const reduceQuery=matchMedia('(prefers-reduced-motion:reduce)');let userPaused=false;try{userPaused=localStorage.getItem('noir-motion')==='off';}catch{}
 const motionAllowed=()=>!reduceQuery.matches&&!userPaused;
-let lenis,mm,collectionTrigger,closing=false;
+let lenis,mm,editorial,collectionTrigger,closing=false;
 const track=$('.product-track');
 function syncMotionButton(){const off=!motionAllowed();$('#motion-toggle').textContent=`MOTION: ${off?'OFF':'ON'}`;$('#motion-toggle').setAttribute('aria-pressed',String(off));document.body.classList.toggle('motion-off',off);}
 function setIndex(i){$$('.product').forEach((p,j)=>{p.inert=motionAllowed()&&innerWidth>760&&j!==i;});$('.collection-count').textContent=`0${i+1} / 03`;$$('[data-slide]').forEach((b,j)=>{b.classList.toggle('active',i===j);b.setAttribute('aria-current',i===j?'true':'false');});}
 function setupMotion(){
- mm?.revert();lenis?.destroy();lenis=null;collectionTrigger=null;gsap.set(track,{clearProps:'transform'});syncMotionButton();
+ editorial?.dispose();editorial=null;mm?.revert();lenis?.destroy();lenis=null;collectionTrigger=null;gsap.set(track,{clearProps:'transform'});syncMotionButton();
  if(!motionAllowed()){ritual.setup();setIndex(0);ScrollTrigger.refresh();return;}
  lenis=new Lenis({duration:1.12,smoothWheel:true,syncTouch:false,anchors:false});lenis.on('scroll',ScrollTrigger.update);
  ritual.setup();
@@ -35,12 +37,14 @@ function setupMotion(){
   const path=$('.graph-curve'),length=path.getTotalLength();gsap.fromTo(path,{strokeDasharray:length,strokeDashoffset:length},{strokeDashoffset:0,ease:'none',scrollTrigger:{trigger:'.roast',start:'top 60%',end:'bottom 70%',scrub:1}});
   gsap.from('.bean-note',{y:20,opacity:0,stagger:.12,duration:.8,scrollTrigger:{trigger:'.anatomy',start:'top 40%',once:true}});
  });
- setIndex(0);ScrollTrigger.refresh();
+ editorial=createEditorialMotion({gsap,ScrollTrigger});setIndex(0);ScrollTrigger.refresh();
 }
 const beans=createBeans({motionAllowed});
 const ritual=createRitual({gsap,ScrollTrigger,motionAllowed,beans,scrollToPosition:top=>{if(lenis)lenis.scrollTo(top,{immediate:true,force:true});else scrollTo({top,behavior:'instant'});}});
 gsap.ticker.add(time=>{lenis?.raf(time*1000);if(!ritual.update(time))beans.update(time);});gsap.ticker.lagSmoothing(0);
 setupMotion();reduceQuery.addEventListener('change',setupMotion);
+document.fonts.ready.then(()=>ScrollTrigger.refresh());
+addEventListener('pageshow',()=>ScrollTrigger.refresh());
 $('#motion-toggle').addEventListener('click',()=>{userPaused=!userPaused;if(reduceQuery.matches&&!userPaused){toast('Reduced motion is enabled in your device settings.');}try{localStorage.setItem('noir-motion',userPaused?'off':'on');}catch{}setupMotion();});
 let introDone=false;
 function endIntro(){if(introDone)return;introDone=true;introTimeline?.kill();gsap.to('.intro',{yPercent:-105,duration:motionAllowed()?.9:0,ease:'power4.inOut',onComplete(){ $('.intro').remove();$('#skip-intro')?.remove(); }});if(motionAllowed())gsap.from('.hero-line',{yPercent:110,stagger:.1,duration:1.1,ease:'power4.out',delay:.25});}
@@ -81,6 +85,6 @@ if(finePointer.matches){let cx=-100,cy=-100,tx=-100,ty=-100;cursor.style.display
 function updateProgress(){const max=document.documentElement.scrollHeight-innerHeight;$('.page-progress').style.transform=`scaleX(${max?scrollY/max:0})`;}
 addEventListener('scroll',updateProgress,{passive:true});addEventListener('resize',()=>{beans.resize();ritual.resize();updateProgress();if(innerWidth<=760)setIndex(Math.round(track.scrollLeft/track.clientWidth));},{passive:true});
 document.fonts.ready.then(()=>ScrollTrigger.refresh());addEventListener('load',()=>{ScrollTrigger.refresh();updateProgress();});
-window.NOIR={version:'1.1.1',webgl:beans.supported,motionAllowed,products:products.map(p=>p.name),ready:true};
+window.NOIR={version:'1.2.0',webgl:beans.supported,motionAllowed,products:products.map(p=>p.name),ready:true};
 
-addEventListener("pagehide",event=>{if(!event.persisted){ritual.dispose();beans.dispose();lenis?.destroy();}});
+addEventListener("pagehide",event=>{if(!event.persisted){editorial?.dispose();ritual.dispose();beans.dispose();lenis?.destroy();}});

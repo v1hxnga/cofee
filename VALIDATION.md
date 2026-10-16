@@ -1,3 +1,21 @@
+# Validation — 16 October 2026 — version 1.2.0
+
+## Final local review
+
+- Built and served from `/Users/vihangainduwara/Desktop/NOIR BEAN`.
+- Visual review passed at 1366×768, 1440×900, 1920×1080, 390×844, 430×932, 768×1024 and 844×390. No horizontal page overflow observed.
+- Dark opening, gravity-directed pour, collision, droplets, closer overhead swirl, floating cup, final package reveal and collection handoff reviewed.
+- One visual defect found in final QA: nearly collapsed splash sheets intersected the rippling coffee surface during overhead transition. Sheets now sink beneath the surface; the affected frame was rechecked and is clear.
+- Forward, reverse and fast scroll pass. Sticky stage stays at top 0 during the chapter; preceding/following sections remain outside the viewport while it is active. No orange flash observed.
+- Resizing preserved the same story progress across desktop, phone, tablet and landscape. Mid-sequence reload restored progress 0.5503 and the rendered scene.
+- Motion OFF displays readable static artwork, removes pin spacers and restores normal flow into the collection. Motion ON restores the chapter.
+- One shared WebGL canvas; final local console returned zero errors and warnings.
+- `npm run build` and `npm run verify` pass. Inline assets, JavaScript syntax, section placement, finite desktop/mobile liquid geometry and deterministic reverse geometry checked.
+
+This is browser viewport testing, not physical-device certification or a measured performance benchmark. Liquid geometry is art-directed, not physical fluid simulation. Previous OS preference fixture validation and recovery details remain below as historical evidence.
+
+---
+
 # Validation — 16 October 2026 — version 1.1.1
 
 ## Story and result

@@ -3,8 +3,8 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
 const clamp=THREE.MathUtils.clamp;
 function noise(x,y,z){return Math.sin(x*16.7+Math.sin(y*7.3))*Math.sin(y*13.1+Math.cos(z*8.1))*Math.sin(z*14.7+Math.cos(x*5.6));}
-function beanGeometry(){
- const g=new THREE.SphereGeometry(1,144,100);const p=g.attributes.position;const colors=[];
+function beanGeometry(mobile=false){
+ const g=new THREE.SphereGeometry(1,mobile?64:112,mobile?44:80);const p=g.attributes.position;const colors=[];
  for(let i=0;i<p.count;i++){
   const ox=p.getX(i),oy=p.getY(i),oz=p.getZ(i);const surface=noise(ox,oy,oz)*.011+noise(ox*3,oy*3,oz*3)*.004;
   let x=ox*.89*(1+surface),y=oy*1.35*(1+surface),z=oz*.58*(1+surface);
@@ -38,9 +38,16 @@ export function createBeans({motionAllowed}){
  const hero=document.getElementById('bean-hero');hero.appendChild(renderer.domElement);hero.querySelector('.bean-fallback').hidden=true;
  const study=document.getElementById('bean-study');
  const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(32,1,.1,40);camera.position.set(0,0,6.4);
- const pmrem=new THREE.PMREMGenerator(renderer);const room=new RoomEnvironment();const env=pmrem.fromScene(room,.04);scene.environment=env.texture;room.dispose();pmrem.dispose();
- const material=new THREE.MeshStandardMaterial({color:0x825032,vertexColors:true,roughness:.78,metalness:.03,bumpMap:makeBump(),bumpScale:.045,envMapIntensity:.4});
- const geo=beanGeometry();const group=new THREE.Group();scene.add(group);
+ const pmrem=new THREE.PMREMGenerator(renderer);const room=new RoomEnvironment();
+ // Broad studio strips give liquids continuous highlights, not point-like glare.
+ const stripGeometry=new THREE.PlaneGeometry(1,1),stripMaterials=[];
+ for(const [x,y,z,w,h,power] of [[-4,3,2,1.5,7,8],[4,2,-3,.7,5,5],[0,6,0,5,2,3]]){
+  const material=new THREE.MeshBasicMaterial({color:0xffebcd,side:THREE.DoubleSide});material.color.multiplyScalar(power);stripMaterials.push(material);
+  const strip=new THREE.Mesh(stripGeometry,material);strip.position.set(x,y,z);strip.scale.set(w,h,1);strip.lookAt(0,0,0);room.add(strip);
+ }
+ const env=pmrem.fromScene(room,.035);stripGeometry.dispose();stripMaterials.forEach(m=>m.dispose());scene.environment=env.texture;room.dispose();pmrem.dispose();
+ const material=new THREE.MeshStandardMaterial({color:0x825032,vertexColors:true,roughness:.58,metalness:0,bumpMap:makeBump(),bumpScale:.045,envMapIntensity:.65});
+ const geo=beanGeometry(mobile);const group=new THREE.Group();scene.add(group);
  const bean=new THREE.Mesh(geo,material);group.add(bean);bean.rotation.set(-.25,-.32,-.53);bean.scale.setScalar(1.04);
  const key=new THREE.DirectionalLight(0xffe1b0,3.8);key.position.set(-3,4,4);scene.add(key);
  const rim=new THREE.DirectionalLight(0xeec69c,2.4);rim.position.set(3,1,-1.4);scene.add(rim);
@@ -51,21 +58,22 @@ export function createBeans({motionAllowed}){
  let currentHost=hero,active=true,pointer={x:0,y:0},smooth={x:0,y:0},lastTime=0,lastW=0,lastH=0,dirty=true,lastMoving=true;
  function resize(){mobile=matchMedia('(max-width:760px)').matches;const r=currentHost.getBoundingClientRect();if(r.width&&r.height&&(r.width!==lastW||r.height!==lastH)){lastW=r.width;lastH=r.height;dirty=true;renderer.setSize(r.width,r.height);camera.aspect=r.width/r.height;camera.updateProjectionMatrix();}}
  resize();
- addEventListener('pointermove',e=>{pointer.x=(e.clientX/innerWidth-.5)*2;pointer.y=(e.clientY/innerHeight-.5)*2;},{passive:true});
+ const onPointer=e=>{if(e.pointerType==='touch')return;pointer.x=(e.clientX/innerWidth-.5)*2;pointer.y=(e.clientY/innerHeight-.5)*2;};addEventListener('pointermove',onPointer,{passive:true});
  const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{entry.target.dataset.visible=entry.isIntersecting?'true':'false';});},{rootMargin:'100px'});observer.observe(hero);observer.observe(study);
  function update(time){
   const inStudy=study.dataset.visible==='true';const inHero=hero.dataset.visible!=='false';active=inStudy||inHero;if(!active||document.hidden)return;
   const host=inStudy?study:hero;if(host!==currentHost||renderer.domElement.parentElement!==host){renderer.toneMappingExposure=1.18;renderer.setPixelRatio(Math.min(devicePixelRatio,mobile?1.35:1.7));lastW=0;currentHost=host;dirty=true;host.appendChild(renderer.domElement);host.querySelector('.bean-fallback').hidden=true;resize();}
-  if(mobile&&time-lastTime<1/30)return;lastTime=time;resize();
+  if(mobile&&time-lastTime<1/30)return;lastTime=time;
   const moving=motionAllowed();if(moving!==lastMoving){dirty=true;lastMoving=moving;}if(!moving&&!dirty)return;smooth.x+=(pointer.x-smooth.x)*.035;smooth.y+=(pointer.y-smooth.y)*.035;
   const heroP=clamp(scrollY/innerHeight,0,1);const studyRect=study.getBoundingClientRect();const studyP=clamp((innerHeight-studyRect.top)/(innerHeight+studyRect.height),0,1);
   bean.rotation.x=-.19+(moving?smooth.y*.12+Math.sin(time*.25)*.06:0);
   bean.rotation.y=inStudy?-.35+(moving?studyP*.9+smooth.x*.23:0):-.35+(moving?smooth.x*.22+Math.sin(time*.17)*.18+heroP*.8:0);
   bean.rotation.z=inStudy?-.3+(moving?studyP*.45:0):-.48+(moving?heroP*.3:0);
   bean.position.y=moving?Math.sin(time*.55)*.055:0;
-  bean.scale.setScalar(inStudy?1.02:1.04);
+  bean.scale.setScalar(inStudy?1.02:1.04+heroP*.65);
+  group.position.z=inStudy?0:heroP*.48;group.rotation.z=inStudy?0:heroP*-.14;
   satellites.forEach((b,i)=>{b.visible=!inStudy&&!mobile;if(moving){b.rotation.y=time*.1+i;b.position.y=(i===1?1.65:-1.65)+Math.sin(time*.4+i)*.08;}});
   camera.position.z=inStudy?6.4:(mobile?6.6:6.7);renderer.render(scene,camera);dirty=false;
  }
- return {update,resize,supported:true,shared:{renderer,environment:env.texture,beanGeometry:geo,beanMaterial:material},dispose(){observer.disconnect();geo.dispose();material.bumpMap.dispose();material.dispose();env.dispose();renderer.dispose();}};
+ return {update,resize,supported:true,shared:{renderer,environment:env.texture,beanGeometry:geo,beanMaterial:material},dispose(){observer.disconnect();removeEventListener('pointermove',onPointer);geo.dispose();material.bumpMap.dispose();material.dispose();env.dispose();renderer.dispose();}};
 }

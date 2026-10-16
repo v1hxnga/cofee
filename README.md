@@ -28,11 +28,13 @@ This edition uses HTML, CSS, modular JavaScript, Three.js, GSAP / ScrollTrigger,
 `src/styles.css` — responsive visual system
 `src/main.js` — navigation, animation, gallery, dialogs, brew recipes
 `src/beans.js` — procedural geometry, materials, and adaptive rendering
-`src/ritual-timeline.js` — one scrubbed chapter timeline, typography, pinning, lifecycle
+`src/ritual-timeline.js` — one scrubbed chapter timeline, typography, sticky-stage bounds, lifecycle
 `src/ritual-scene.js` — shared-renderer camera, lighting, steam, beans
 `src/ritual-cup.js` — ceramic cup and shader-distorted crema
 `src/ritual-liquids.js` — reversible spline streams, splash sheets, instanced droplets
 `src/ritual.css` — chapter-specific responsive styles
+`src/editorial.css` — layered typography and portrait/landscape composition
+`src/editorial-motion.js` — reversible editorial reveals and parallax
 `assets` — original concept photography and crema texture
 `build.mjs` — creates a single portable HTML file
 
@@ -44,7 +46,7 @@ Photography was generated with the built-in image-generation tool. These images 
 
 ## Performance and access
 
-The final HTML is about 4.64 MB. It embeds compressed photographs and local WOFF2 fonts, contains no runtime network requests, uses one shared WebGL renderer, caps pixel density, reduces rendering frequency on phones, and suspends rendering off-screen. Systems without WebGL get a CSS-rendered bean. Reduced motion removes the opening animation, smooth scrolling, pinned gallery, and ongoing bean movement; the ritual becomes an original photographic composition with readable copy. No analytics or tracking are included.
+The final HTML is about 4.65 MiB. It embeds compressed photographs and local WOFF2 fonts, contains no runtime network requests, uses one shared WebGL renderer, caps pixel density, reduces rendering frequency on phones, and suspends rendering off-screen. Systems without WebGL get a CSS-rendered bean. Reduced motion removes the opening animation, smooth scrolling, pinned gallery, and ongoing bean movement; the ritual becomes an original photographic composition with readable copy. No analytics or tracking are included.
 
 The single-file format trades some image reuse/compression efficiency for easy offline distribution. For a hosted commercial deployment, images and scripts can be served as separate cached files. The screenshot-based review is not a measured Core Web Vitals or real-device performance benchmark.
 
@@ -57,3 +59,13 @@ The ritual uses the existing renderer and smooth-scroll instance. Its 3D scene i
 Liquids are art-directed procedural meshes and shader distortion, not a physical fluid simulation or a prerecorded reference video. The isolated liquid module can be exchanged for production-rendered media later. No reference video was supplied.
 
 The Desktop project also includes the current machine's installed dependencies, allowing `npm run build` without reinstalling here. For another machine, run `npm ci` to install the appropriate dependency binaries.
+
+## Cinematic edition 1.2.0
+
+The current Desktop project is the source for the GitHub repository `v1hxnga/cofee` and existing Vercel project `coffee`. The production alias is https://coffee-ecru-rho.vercel.app.
+
+The ritual opening now uses a dark overlay instead of the erroneous orange fill. A browser-owned sticky stage replaces ScrollTrigger's fixed pin swap; the master timeline still directs all six phases. The poster stays visible until the first WebGL render. Resize preserves normalized story progress.
+
+The existing liquid system now includes gravity-directed jets, an irregular collapsing crown, reversible ballistic droplets, softer studio reflections and closer overhead framing. Settling splash sheets submerge beneath the coffee surface to prevent intersecting patches. Larger layered typography and separate portrait/landscape framing complete the editorial treatment.
+
+Build: `npm run build`. Validate: `npm run verify`. Run locally: `npm run preview`, then open http://127.0.0.1:4173. `dist/index.html` and `NOIR BEAN.html` contain the same standalone build.

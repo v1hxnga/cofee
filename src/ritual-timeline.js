@@ -22,19 +22,19 @@ export function createRitual({gsap,ScrollTrigger,motionAllowed,beans,scrollToPos
   if(loading||scene||disposed||!motionAllowed())return;
   if(!beans.supported){section.classList.add('ritual-fallback');return;}
   loading=true;
-  try{const{createRitualScene}=await import('./ritual-scene.js');if(disposed)return;scene=createRitualScene({shared:beans.shared,host});section.classList.add('ritual-ready');}
+  try{const{createRitualScene}=await import('./ritual-scene.js');if(disposed)return;scene=createRitualScene({shared:beans.shared,host});scene.invalidate();}
   catch(error){section.classList.add('ritual-fallback');console.warn('The ritual is using its photographic fallback.',error.message);}
  }
  const observer=new IntersectionObserver(entries=>{near=entries[0].isIntersecting;if(near)prepare();},{rootMargin:'120% 0px'});observer.observe(section);
  function apply(){
   const p=state.progress;if(p===lastApplied)return;lastApplied=p;
   section.dataset.progress=p.toFixed(4);
-  const mobile=innerWidth<=1000,reveal=smooth(0,.13,p),opening=smooth(.85,.98,p);
+  const mobile=innerWidth<=1000&&innerHeight>innerWidth*.8,reveal=.12+.88*smooth(0,.13,p),opening=smooth(.85,.98,p);
   section.querySelector('.ritual-darkness').style.opacity=String(1-smooth(0,.085,p));
   const scale=lerp(.035,1,reveal)*(1+opening*(mobile?9:6));disc.style.transform=`translate(-50%,-50%) scale(${scale})`;disc.style.left=`${lerp(58,mobile?53:69,reveal)}%`;disc.style.top=`${lerp(5,mobile?62:46,reveal)}%`;disc.style.opacity=String(lerp(.12,1,reveal));
-  titles.forEach((title,i)=>{const phase=PHASES[i],on=i===0?smooth(0,.035,p):smooth(phase.start,phase.start+.035,p),off=smooth(phase.end-.04,phase.end,p);title.style.opacity=String(on*(1-off));title.style.transform=`translate3d(${(1-on)*2-off*1.5}vw,${(1-on)*28-off*20}px,0)`;title.style.clipPath=`inset(${(1-on)*100}% 0 ${off*100}% 0)`;});
+  titles.forEach((title,i)=>{const phase=PHASES[i],on=i===0?1:smooth(phase.start,phase.start+.035,p),off=smooth(phase.end-.04,phase.end,p);title.style.setProperty('--split',String((1-on)+off));title.style.opacity=String(on*(1-off));title.style.transform=`translate3d(${(1-on)*2-off*1.5}vw,${(1-on)*28-off*20}px,0)`;title.style.clipPath=`inset(${(1-on)*100}% 0 ${off*100}% 0)`;});
   let index=0;for(let i=1;i<PHASES.length;i++)if(p>=PHASES[i].start+.018)index=i;
-  if(index!==lastPhase){lastPhase=index;labels.forEach((label,i)=>{label.classList.toggle('current',i===index);label.setAttribute('aria-current',i===index?'step':'false');});caption.innerHTML=PHASES[index].caption;section.dataset.phase=String(index+1);
+  if(index!==lastPhase){lastPhase=index;labels.forEach((label,i)=>{label.classList.toggle('current',i===index);label.setAttribute('aria-current',i===index?'step':'false');});caption.innerHTML=PHASES[index].caption;section.dataset.phase=String(index+1);section.querySelector('.ritual-counter').textContent=String(index+1).padStart(2,'0');
    // A future optional sound layer may subscribe; no audio loads or autoplays.
    section.dispatchEvent(new CustomEvent('ritual:phase',{detail:{phase:index+1,progress:p}}));
   }
@@ -51,7 +51,11 @@ export function createRitual({gsap,ScrollTrigger,motionAllowed,beans,scrollToPos
   section.classList.toggle('ritual-static',!motionAllowed());section.style.color='';
   if(!motionAllowed()){leave();return;}
   state.progress=0;apply();if(near)prepare();
-  timeline=gsap.timeline({scrollTrigger:{id:'coffee-ritual',trigger:section,pin:stage,start:'top top',end:()=>'+='+innerHeight*(innerWidth<=1000?4.4:6.2),scrub:.45,anticipatePin:1,invalidateOnRefresh:true,refreshPriority:2,onRefresh:()=>{lastApplied=-1;scene?.invalidate();apply();}}});
+  // CSS owns the sticky stage and scroll space. The timeline only choreographs
+  // its children: no fixed-position swap, transformed pin spacer, or pin refresh.
+  section.style.setProperty('--ritual-vh',innerHeight+'px');
+  section.style.setProperty('--ritual-travel',innerHeight*(innerWidth<=1000?4.4:6.2)+'px');
+  timeline=gsap.timeline({scrollTrigger:{id:'coffee-ritual',trigger:section,start:'top top',end:'bottom bottom',scrub:true,invalidateOnRefresh:true,refreshPriority:2,onRefresh:()=>{lastApplied=-1;scene?.invalidate();apply();}}});
   timeline.to(state,{progress:1,duration:1,ease:'none',onUpdate:apply});
  }
  function update(time){
@@ -59,10 +63,14 @@ export function createRitual({gsap,ScrollTrigger,motionAllowed,beans,scrollToPos
   const rect=stage.getBoundingClientRect();
   if(innerWidth===stableWidth&&innerHeight===stableHeight){stableProgress=state.progress;stableActive=!!timeline?.scrollTrigger?.isActive;}
   if(rect.bottom<=0||rect.top>=innerHeight)return false;
-  scene.update(state.progress,time);return true;
+  scene.update(state.progress,time);if(scene.renderCount>0)section.classList.add('ritual-ready');return true;
  }
  function resize(){
+  // Mobile browser chrome is not a composition resize. Keep its scroll distance.
+  if(innerWidth===stableWidth&&Math.abs(innerHeight-stableHeight)<stableHeight*.2&&matchMedia('(pointer:coarse)').matches)return;
   const p=stableProgress,preserve=stableActive;
+  section.style.setProperty('--ritual-vh',innerHeight+'px');
+  section.style.setProperty('--ritual-travel',innerHeight*(innerWidth<=1000?4.4:6.2)+'px');
   lastApplied=-1;scene?.invalidate();if(motionAllowed())apply();
   clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(disposed)return;ScrollTrigger.refresh();if(preserve&&timeline?.scrollTrigger){const trigger=timeline.scrollTrigger;scrollToPosition(trigger.start+(trigger.end-trigger.start)*p);timeline.progress(p,true);state.progress=p;lastApplied=-1;apply();}stableWidth=innerWidth;stableHeight=innerHeight;},280);
  }
