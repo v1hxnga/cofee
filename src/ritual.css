@@ -12,6 +12,6 @@
 
 /* One layout owner: the browser sticks the stage inside its explicit chapter. */
 .ritual{height:calc(var(--ritual-vh,100svh) + var(--ritual-travel,620svh));z-index:3}
-.ritual-stage{position:sticky;top:0;height:var(--ritual-vh,100svh);min-height:0;isolation:isolate}
+.ritual-stage{position:sticky;top:0;height:var(--ritual-vh,100svh);min-height:0;max-width:100%;overflow:clip;isolation:isolate}
 .ritual-static{height:auto}
 .ritual-static .ritual-stage{position:relative;top:auto}

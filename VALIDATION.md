@@ -1,3 +1,40 @@
+# Horizontal containment validation — 17 October 2026
+
+## Findings and changes
+
+No partial edits were present on resume; the working tree started at d586549. The supplied recording shows the browser/Space sliding away to reveal the macOS Desktop. That OS-level transition is distinct from webpage scrolling and cannot be reliably intercepted by website code.
+
+No genuine document-level horizontal overflow was reproduced before the fix: document scrollWidth matched the viewport at inspected desktop/mobile states, including the expanding disc. Wider internal bounds were intentional: at 1366px the collection track was 4098px wide and the expanding ritual disc produced 2281px of stage scrollWidth, both already clipped by their wrappers. The hero canvas host and decorative type also extended visually but were clipped by their scene parents. Root overscroll-behavior-x was auto.
+
+The CSS-only defense adds horizontal overscroll suppression on html/body and overflow-x:clip plus width bounds on html/body/main. Clip avoids creating a new scrolling ancestor that would break sticky positioning. Ritual and collection wrappers now use overflow:clip instead of hidden, so they cannot become accidental scroll containers. WebGL hosts clip their contents and canvas CSS width is capped to the host. Mobile coffee/cafe galleries retain native horizontal scrolling with edge chaining contained. No JavaScript, Lenis settings, ScrollTrigger timelines, pointer/touch listeners, viewport zoom settings, typography or design changes were made.
+
+## Browser checks
+
+| Viewport | Document/client width | Page scrollX | Result |
+| --- | --- | --- | --- |
+| 1366×768 | 1366 / 1366 | 0 | Dark opening, collision, mixed-axis scroll |
+| 1440×900 | 1440 / 1440 | 0 | Collision, overhead, mixed-axis scroll |
+| 1920×1080 | 1920 / 1920 | 0 | Fast reverse, fast forward, expanded disc, collection transform |
+| 390×844 | 390 / 390 | 0 | Mobile ritual, mixed-axis scroll |
+| 430×932 | 430 / 430 | 0 | Mobile ritual, native gallery, café, motion off/on |
+
+- Horizontal wheel bursts interleaved with vertical forward/reverse bursts did not move the webpage sideways. Vertical progress continued and sticky-stage top stayed 0 during the active ritual.
+- Desktop collection navigation advanced to Slow Burn while the wrapper scrollLeft stayed 0.
+- Mobile coffee gallery scrolled to x=430 and x=860 (second/third cards), with the webpage at x=0, including further input at the gallery edge. Café gallery interaction also worked.
+- Canvas CSS widths matched their hosts. Oversized typography, the expanded disc, fixed cursor and transformed collection did not expand document width.
+- Root overscroll-behavior-y remains auto, main overflow-y remains visible, and touch-action remains auto. Viewport meta remains width=device-width, initial-scale=1. No zoom limit or gesture cancellation was added.
+- Motion OFF fallback remains readable and in normal flow; switching ON restores the ritual.
+- No orange opening/flash observed. Browser console: zero warnings/errors.
+- npm run build and npm run verify passed, including finite liquid geometry and deterministic reverse scrubbing.
+
+## Limits
+
+Browser automation exposes separate horizontal/vertical wheel actions, so aggressive diagonal input was approximated with interleaved mixed-axis bursts, not a physical multitouch trackpad or a single trusted two-axis event. Native pinch and macOS Space gestures were not simulated. CSS overscroll support varies by browser; it can suppress browser-level horizontal boundary effects/history swipes where supported, but it cannot control macOS Space switching. No OS settings or invasive event interception were used.
+
+References: [MDN overscroll-behavior-x](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/overscroll-behavior-x), [MDN overflow-x](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/overflow-x), [Apple trackpad gestures](https://support.apple.com/en-ie/102482).
+
+---
+
 # Validation — 16 October 2026 — version 1.2.0
 
 ## Final local review

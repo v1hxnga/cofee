@@ -8,3 +8,16 @@ body.motion-off .intro{display:none}body.motion-off .collection-sticky{height:au
 
 @media(max-width:760px){.hero h1{top:22.5%;font-size:20.5vw;line-height:1.03}.bean-canvas{top:49%;height:34%}}
 @media(min-width:761px) and (max-width:1100px){.hero{height:max(760px,100svh)}.hero h1{top:27%}}
+
+/* Horizontal gesture boundaries. Clip does not create a scroll container, so
+   the document remains the vertical scroll owner for Lenis and sticky/pins.
+   Do not use overflow:hidden on main/body or restrict touch-action: native
+   vertical touch scrolling and pinch zoom must remain available. */
+html,body{overscroll-behavior-x:none}
+html,body,main{max-width:100%;min-width:0;overflow-x:clip}
+/* Oversized type and transformed scene contents stay visual overflow only. */
+.collection-sticky{overflow:clip;max-width:100%}
+.bean-canvas,.bean-study,.ritual-canvas{overflow:clip}
+.bean-canvas canvas,.bean-study canvas,.ritual-canvas canvas{max-width:100%}
+/* Keep the existing mobile swipe galleries; stop horizontal edge chaining. */
+.product-track,.cafe-gallery{overscroll-behavior-x:contain}

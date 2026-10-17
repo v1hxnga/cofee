@@ -1,3 +1,16 @@
+# Horizontal gesture hardening — 17 October 2026
+
+Changed files from d586549:
+
+- `src/styles.css`: horizontal page bounds/overscroll, clipped scene hosts, capped canvas widths, and contained mobile gallery edge chaining.
+- `src/ritual.css`: non-scrollable clipping and width bound for the sticky ritual stage.
+- `dist/index.html`, `NOIR BEAN.html`: rebuilt standalone exports.
+- `VALIDATION.md`, `CHANGES.md`: findings, exact measurements, test coverage and OS-level limitations.
+
+No JavaScript or design changes. The document remains the sole vertical scrolling owner.
+
+---
+
 # Cinematic edition 1.2.0 — changes from b3d71ae
 
 ## Modified
