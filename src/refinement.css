@@ -1,0 +1,169 @@
+/* A quieter editorial finish. Scene geometry and scroll ownership stay in
+   their original modules; these rules only govern colour and presentation. */
+:root{--ink:#050505;--cream:#f0ede5;--muted:#aaa69e;--amber:#ad8c6b;--line:rgba(240,237,229,.16)}
+html{scrollbar-color:#66635b #050505}
+body,.hero,.anatomy,.ritual,.ritual-stage,footer,.intro,.curtain{background:var(--ink)}
+.ritual-darkness{background:#000}
+.grain{opacity:.012}
+.page-progress{height:1px;opacity:.55}
+.curtain span{color:var(--cream)}
+.period{color:var(--cream)}
+
+/* Let the headline and sculptural bean carry the hero. */
+.header{padding-top:28px;padding-bottom:28px}
+.header-actions{gap:16px}
+.hero-meta{font-size:10px;letter-spacing:.16em;color:var(--muted)}
+.hero .hero-bottom{bottom:56px;gap:20px}
+.hero h1{left:4vw}
+@media(min-width:1101px){.hero{height:max(760px,100svh)}}
+.hero-bottom .scroll-cue{margin-left:0}
+.intro-top{justify-content:flex-end}
+.intro-top>span{display:none}
+.intro-bottom{justify-content:flex-end}
+.intro-star{font-size:45px}
+
+/* Pill controls: quiet fills, generous hit areas, no elastic movement.
+   Image cards and 3D package buttons deliberately keep their own silhouettes. */
+.button,.text-link,.scroll-cue,.header-shop,.header-actions button,
+.menu-close,.ritual-skip,.ritual-roast-link,#skip-intro{
+ display:inline-flex;align-items:center;justify-content:space-between;
+ width:fit-content;max-width:100%;min-height:48px;gap:24px;
+ padding:14px 24px;border:1px solid currentColor;border-radius:999px;
+ font:500 10px/1.4 var(--body);letter-spacing:.09em;
+ transition:background-color .25s,color .25s,border-color .25s,transform .25s;
+}
+.button{min-height:58px;min-width:230px;padding:18px 28px}
+.button-cream{background:var(--cream);color:var(--ink);border-color:var(--cream)}
+.button-dark{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.text-link{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.header-shop,.header-actions button,.scroll-cue,.menu-close,.ritual-skip,#skip-intro{border-color:#f0ede53d}
+.header-shop span{margin:0}
+.button span,.text-link span,.scroll-cue span,.ritual-roast-link span{font-size:22px;line-height:1}
+.text-link:hover span{transform:none}
+.footer-top .text-link,.ritual-static-copy .text-link{background:var(--cream);border-color:var(--cream);color:var(--ink)}
+.ritual-skip{color:inherit;font-size:9px;padding:11px 20px;min-height:44px}
+.ritual-roast-link{margin:36px 0 12px auto;background:var(--cream);border-color:var(--cream);color:var(--ink)}
+.collection-nav button{border-radius:50%;opacity:1;color:#656158;border:1px solid transparent}
+.collection-nav button.active{border-color:currentColor;color:var(--ink)}
+.collection-nav button.active:after{display:none}
+.tasting{gap:12px}
+.tasting span{border:0;padding:0;font-size:9px;letter-spacing:.07em}
+.tasting span+span:before{content:'·';margin-right:12px}
+.detail-notes span{border-radius:999px}
+.detail-dialog,.info-dialog{border-radius:22px}
+dialog::backdrop{background:#000e8}
+.dialog-close{border-radius:999px;width:auto;float:right;margin:12px;padding:12px 20px;min-height:44px;border:1px solid #05050530;background:var(--cream)}
+.detail-inner{clear:both}
+.info-dialog>.brand-star{display:block;clear:both}
+.info-dialog .dialog-close{padding:12px 20px}
+.footer-bottom button{min-height:44px;padding:10px 16px;border-radius:999px;border:1px solid var(--line);font-size:9px}
+.footer-top{justify-content:flex-end}
+.footer-bottom{font-size:9px}
+#cursor.expanded,#cursor.ritual-ring{width:26px;height:26px;border:1px solid #eee9de;background:transparent;box-shadow:none;mix-blend-mode:difference}
+
+/* Essential context stays readable, with decorative captions removed. */
+.section-eyebrow{font-size:10px;letter-spacing:.12em}
+.manifesto-foot p{font-size:14px;line-height:1.8;max-width:340px}
+.origin-top{font-size:10px}
+.origin-bottom{justify-content:space-between;gap:32px}
+.origin-bottom span{font-size:9px}
+.bean-facts{position:absolute;left:6vw;right:6vw;bottom:60px;display:flex;justify-content:space-between;gap:24px;z-index:4}
+.bean-facts .bean-note{position:static;width:auto}
+.bean-facts .bean-note:after{display:none}
+.bean-note strong{margin:0;font-size:12px;font-weight:400;letter-spacing:.08em;color:var(--muted)}
+.bean-study{inset:20% 20% 12%}
+.roast{background:var(--ink);color:var(--cream);border-top:1px solid var(--line)}
+.roast-panel{padding-top:80px}
+.temperature{color:var(--amber)}
+.roast-phase{border-color:var(--line);color:var(--muted)}
+.roast-phase i{background:var(--amber)}
+.graph-grid{stroke:#f0ede50d}
+.graph-curve,.graph-point{stroke:var(--amber)}
+.graph-point{fill:var(--amber)}
+.roast-labels{color:var(--muted)}
+.ritual-meta{font-size:10px}
+.ritual-meta .ritual-skip{margin-left:auto}
+.ritual-chapters{margin-left:auto}
+.ritual-chapters span{display:none}
+.ritual-chapters span.current{display:block;font-size:10px;letter-spacing:.08em}
+.ritual-direction{font-size:9px}
+.ritual-meter{height:1px}
+.ritual-disc{box-shadow:none}
+.ritual-title[data-phase="5"]{color:var(--ink)}
+.ritual.is-ending .ritual-skip{border-color:#05050540}
+.collection-head h2{font-size:30px}
+.collection-count{margin-left:auto}
+.collection-nav{justify-content:space-between}
+.collection-nav .gallery-hint{font-size:9px;color:#656158}
+.product-two{background:#ddd6cb}
+.product-three{background:#c2c5ba}
+.cafe-caption p{font-size:14px;line-height:1.8}
+.visit-info .text-link{max-width:none}
+
+/* The navigation becomes an ink-black interlude. */
+.menu-dialog{background:var(--ink);color:var(--cream)}
+.menu-links a{border-color:var(--line)}
+.menu-links a:hover{color:var(--cream);padding-left:8px}
+.menu-preview img{filter:brightness(.55) saturate(.65)}
+
+@media(hover:hover){
+ .button-cream:hover,.footer-top .text-link:hover,.ritual-roast-link:hover,.ritual-static-copy .text-link:hover{background:#dfd8ca;border-color:#dfd8ca;color:var(--ink)}
+ .button-dark:hover,.text-link:hover{background:#292725;border-color:#292725;color:var(--cream)}
+ .header-shop:hover,.header-actions button:hover,.scroll-cue:hover,.menu-close:hover,.ritual-skip:hover,#skip-intro:hover{background:#ffffff0d;border-color:#f0ede580}
+ .button:hover,.text-link:hover{transform:translateY(-2px)}
+}
+@media(max-width:1000px){
+ .ritual-meta{font-size:9px}
+ .ritual-skip{font-size:8px;padding:10px 16px;min-height:44px}
+ .ritual-chapters span.current{font-size:9px}
+}
+@media(min-width:761px) and (max-width:1100px) and (orientation:portrait){
+ .hero h1{top:19%;font-size:14vw}
+ .hero .bean-canvas{top:47%;right:5%;width:70%;height:38%}
+}
+@media(max-width:760px){
+ .header{padding:22px 6vw}
+ .header-shop{display:none}
+ .header-actions button{min-height:44px;font-size:9px;padding:10px 16px;gap:12px}
+ .hero-meta{font-size:9px;top:128px}
+ .hero h1{left:6vw;font-size:20vw;top:23%}
+ .hero .bean-canvas{top:44%;right:-12%;width:86%;height:36%}
+ .hero .hero-bottom{bottom:30px;display:flex;flex-wrap:wrap;gap:12px}
+ .hero-bottom .button{width:100%;min-height:56px;padding:17px 24px}
+ .hero-bottom .scroll-cue{position:static;width:100%;justify-content:center;border-color:transparent;min-height:44px;padding:10px 16px;font-size:9px}
+ .section-eyebrow{font-size:9px}
+ .text-link{font-size:9px;min-height:48px;padding:14px 22px}
+ .manifesto-foot p,.cafe-caption p{font-size:13px}
+ .origin-top{font-size:9px}
+ .origin-bottom span{font-size:8px}
+ .bean-facts{bottom:55px;display:grid;gap:16px}
+ .bean-note strong{font-size:10px;line-height:1.5}
+ .anatomy{height:800px}
+ .bean-study{inset:25% 0 20%}
+ .roast-panel{padding-top:45px}
+ .roast-panel p{font-size:12px;line-height:1.7}
+ .collection-head{flex-wrap:nowrap;gap:12px}
+ .collection-head h2{order:0;flex-basis:auto;font-size:21px}
+ .collection-head h2 em{font-size:25px;margin-left:4px}
+ .collection-head>span{font-size:9px}
+ .product-track{height:calc(100% - 160px)}
+ .product-info .text-link{font-size:9px;min-height:48px;padding:14px 22px}
+ .tasting{bottom:66px;gap:9px}
+ .tasting span{font-size:8px;padding:0}
+ .tasting span+span:before{margin-right:9px}
+ .collection-nav{bottom:12px}
+ .collection-nav .gallery-hint{font-size:8px}
+ .visit-grid{grid-template-columns:1fr}
+ .visit h2{grid-column:auto}
+ .visit-info p,.visit-time p,.visit-time small{font-size:9px}
+ .visit-info strong{font-size:23px}
+ .visit-info .text-link{font-size:9px}
+ .visit-time{padding-left:0;border-left:0;border-top:1px solid #05050526;padding-top:24px}
+ .visit-time strong{font-size:23px}
+ .footer-top .text-link{font-size:9px;min-height:48px;padding:14px 22px;gap:24px}
+ .footer-bottom{font-size:8px;gap:12px}
+ .footer-bottom button{font-size:8px;padding:10px 14px;min-height:44px}
+ .footer-bottom>span:first-child{width:100%}
+}
+@media(prefers-reduced-motion:reduce){.button:hover,.text-link:hover{transform:none}}
+body.motion-off .button:hover,body.motion-off .text-link:hover{transform:none}

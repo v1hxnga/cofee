@@ -1,3 +1,19 @@
+# Minimal black refinement — 18 October 2026
+
+Focused refinement of the existing site from eaf4bda; no new project or scroll-system replacement.
+
+- Removed hero bean captions, orbit/outline typography, vertical/edition labels, header slogan and helper sentences.
+- Reduced section headings to one identifier; removed origin coordinates/crosshair copy, redundant bean annotations, duplicate product numbers/country ghosts, footer/menu slogans, and cursor hover words.
+- Reduced ritual UI to the main phase title, one current chapter and useful navigation. Removed ghost type, giant counter, side label, supporting caption, percentage and the expanding disc's decorative star. All six phase timings, scene geometry and cameras are retained.
+- Added src/refinement.css: #050505 surfaces, #000 ritual opening, much lighter texture, muted copper details, a black roast section/menu/transition, ivory contrast, pill CTAs and restrained hover motion.
+- Removed springy magnetic-button motion and animation targets belonging to removed decorations.
+- Corrected portrait-tablet hero framing so the bean no longer crowds the headline. Mobile visit information now stacks with readable text and comfortable controls.
+- Preserved product information, recipe downloads, menu/dialog behavior, motion preferences, native galleries, Lenis, sticky ritual and horizontal containment.
+
+Changed: src/index.html, src/refinement.css (added), src/main.js, src/editorial-motion.js, src/ritual-timeline.js, build.mjs, dist/index.html, NOIR BEAN.html, CHANGES.md, VALIDATION.md.
+
+---
+
 # Horizontal gesture hardening — 17 October 2026
 
 Changed files from d586549:

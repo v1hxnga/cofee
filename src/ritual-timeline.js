@@ -2,17 +2,17 @@ const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
 const smooth=(a,b,p)=>{const x=clamp((p-a)/(b-a));return x*x*(3-2*x);};
 const lerp=(a,b,t)=>a+(b-a)*t;
 const PHASES=[
- {start:0,end:.145,caption:'FROM FIRST LIGHT.<br>TO THE LAST DROP.'},
- {start:.12,end:.32,caption:'ESPRESSO, UNINTERRUPTED.<br>ONE CONTINUOUS POUR.'},
- {start:.295,end:.50,caption:'TWO ELEMENTS.<br>ONE BEAUTIFUL COLLISION.'},
- {start:.475,end:.69,caption:'NOTHING TO ADD.<br>EVERYTHING IN BALANCE.'},
- {start:.665,end:.88,caption:'SINGLE ORIGIN.<br>TAKE YOUR TIME.'},
- {start:.855,end:1.1,caption:'THE NEXT OBSESSION.<br>NIGHT BLOOM / ETHIOPIA.'}
+ {start:0,end:.145},
+ {start:.12,end:.32},
+ {start:.295,end:.50},
+ {start:.475,end:.69},
+ {start:.665,end:.88},
+ {start:.855,end:1.1}
 ];
 
 export function createRitual({gsap,ScrollTrigger,motionAllowed,beans,scrollToPosition}){
  const section=document.querySelector('#ritual'),stage=section.querySelector('.ritual-stage'),host=section.querySelector('.ritual-canvas');
- const disc=section.querySelector('.ritual-disc'),titles=[...section.querySelectorAll('.ritual-title')],labels=[...section.querySelectorAll('.ritual-chapters span')],caption=section.querySelector('#ritual-caption'),handoff=section.querySelector('.ritual-handoff');
+ const disc=section.querySelector('.ritual-disc'),titles=[...section.querySelectorAll('.ritual-title')],labels=[...section.querySelectorAll('.ritual-chapters span')],handoff=section.querySelector('.ritual-handoff');
  const bag=document.querySelector('.product-one .coffee-package').cloneNode(true);handoff.appendChild(bag);
  const state={progress:0};let timeline,scene,loading=false,near=false,disposed=false,lastApplied=-1,lastPhase=-1,resizeTimer,stableWidth=innerWidth,stableHeight=innerHeight,stableProgress=0,stableActive=false;
  const fine=matchMedia('(hover:hover) and (pointer:fine)');const cursor=document.querySelector('#cursor');
@@ -34,15 +34,12 @@ export function createRitual({gsap,ScrollTrigger,motionAllowed,beans,scrollToPos
   const scale=lerp(.035,1,reveal)*(1+opening*(mobile?9:6));disc.style.transform=`translate(-50%,-50%) scale(${scale})`;disc.style.left=`${lerp(58,mobile?53:69,reveal)}%`;disc.style.top=`${lerp(5,mobile?62:46,reveal)}%`;disc.style.opacity=String(lerp(.12,1,reveal));
   titles.forEach((title,i)=>{const phase=PHASES[i],on=i===0?1:smooth(phase.start,phase.start+.035,p),off=smooth(phase.end-.04,phase.end,p);title.style.setProperty('--split',String((1-on)+off));title.style.opacity=String(on*(1-off));title.style.transform=`translate3d(${(1-on)*2-off*1.5}vw,${(1-on)*28-off*20}px,0)`;title.style.clipPath=`inset(${(1-on)*100}% 0 ${off*100}% 0)`;});
   let index=0;for(let i=1;i<PHASES.length;i++)if(p>=PHASES[i].start+.018)index=i;
-  if(index!==lastPhase){lastPhase=index;labels.forEach((label,i)=>{label.classList.toggle('current',i===index);label.setAttribute('aria-current',i===index?'step':'false');});caption.innerHTML=PHASES[index].caption;section.dataset.phase=String(index+1);section.querySelector('.ritual-counter').textContent=String(index+1).padStart(2,'0');
+  if(index!==lastPhase){lastPhase=index;labels.forEach((label,i)=>{label.classList.toggle('current',i===index);label.setAttribute('aria-current',i===index?'step':'false');});section.dataset.phase=String(index+1);
    // A future optional sound layer may subscribe; no audio loads or autoplays.
    section.dispatchEvent(new CustomEvent('ritual:phase',{detail:{phase:index+1,progress:p}}));
   }
-  section.style.color=p>.92?'#171714':'#eeebe2';
-  section.querySelector('.ritual-caption').style.opacity=String(1-smooth(.83,.87,p)+smooth(.95,.99,p));
-  section.querySelector('.ritual-ghost').style.transform=`translateX(${-6*p}%)`;
+  section.style.color=p>.92?'#050505':'#eeebe2';
   section.querySelector('.ritual-meter>span').style.transform=`scaleX(${p})`;
-  section.querySelector('.ritual-percent').textContent=String(Math.round(p*100)).padStart(2,'0')+'—100';
   handoff.style.opacity=String(smooth(.91,.96,p));handoff.style.transform=`translateY(${lerp(110,0,smooth(.885,.99,p))}%) rotate(${lerp(7,0,smooth(.885,.99,p))}deg)`;
   section.style.setProperty('--poster-scale',String(1+p*.16));section.style.setProperty('--poster-light',String(.4+reveal*.6));section.classList.toggle('is-ending',p>.87);
  }

@@ -7,12 +7,9 @@ export function createEditorialMotion({gsap,ScrollTrigger}){
   gsap.fromTo('.origin h2',{yPercent:18},{yPercent:-7,ease:'none',scrollTrigger:{trigger:'.origin',start:'top bottom',end:'bottom top',scrub:true}});
   gsap.fromTo('.cafe-gallery',{clipPath:'inset(8% 4% 8% 4%)'},{clipPath:'inset(0% 0% 0% 0%)',ease:'none',scrollTrigger:{trigger:'.cafe-gallery',start:'top 95%',end:'top 25%',scrub:true}});
   gsap.fromTo('.cafe-photo img',{scale:1.2},{scale:1,ease:'none',scrollTrigger:{trigger:'.cafe-gallery',start:'top bottom',end:'bottom top',scrub:true}});
-  gsap.to('.hero-outline',{xPercent:-18,yPercent:-20,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:true}});
  });
  context.add('(min-width:1001px)',()=>{
   gsap.fromTo('.manifesto h2',{rotationX:9,transformPerspective:1100},{rotationX:-3,ease:'none',scrollTrigger:{trigger:'.manifesto',start:'top bottom',end:'bottom top',scrub:true}});
-  gsap.to('.editorial-number',{yPercent:-25,ease:'none',scrollTrigger:{trigger:'.anatomy',start:'top bottom',end:'bottom top',scrub:true}});
-  gsap.to('.product-country',{xPercent:-12,ease:'none',scrollTrigger:{trigger:'.collection',start:'top top',end:()=>'+='+innerWidth*2.3,scrub:true}});
  });
  return{dispose:()=>context.revert()};
 }

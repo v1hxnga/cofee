@@ -1,3 +1,26 @@
+# Minimal black refinement validation — 18 October 2026
+
+Continued the existing partial edits. The source remains the Desktop NOIR BEAN Git project, connected to v1hxnga/cofee and Vercel coffee.
+
+## Local visual and interaction QA
+
+- Reviewed 1366×768, 1440×900, 1920×1080, 390×844, 430×932 and portrait tablet 820×1180.
+- Document scrollWidth matched clientWidth at all sampled layouts: 1351, 1425, 1905, 375, 415 and 805px respectively. This browser reserves 15px for its vertical scrollbar. Page scrollX stayed zero.
+- Hero, anatomy, roast, ritual stage, menu, footer, transition and body computed backgrounds are rgb(5,5,5). Ritual opening overlay is #000. Grain opacity reduced from .045 to .012.
+- Relevant CTA controls computed 999px radii with minimum heights of 44–58px; image cards and package silhouettes remain unchanged.
+- Desktop and mobile menus open, navigate and close. Menu transition is black. Coffee detail dialog remains legible and independently scrollable; mobile dialog scrollWidth/clientWidth both 330px. Recipe action remains a pill.
+- Mobile gallery advances to Slow Burn at scrollLeft 375px while page scrollX remains zero. Touch/zoom restrictions and Lenis configuration are unchanged.
+- Ritual opening, collision, overhead swirl, final handoff, forward/reverse and fast scroll visually checked. Reverse returned to collision progress .3711 after handoff .9517. No orange flash observed.
+- Tablet resize preserved ritual progress .3635. Visual inspection found the tablet hero bean crowded the last headline line; a portrait-tablet-only CSS adjustment gives it separate space. Retested successfully.
+- Motion OFF renders the static ritual and readable CTA; Motion ON restores animation.
+- Console warning/error logs empty after interactions and motion toggling.
+- npm run build and npm run verify pass: inline script parses, embedded assets resolve, accessibility hooks/sections remain, all six phases present, geometry finite and reverse liquid geometry deterministic.
+- No new input cancellation or scroll container was introduced. Browser wheel bursts and responsive viewport overrides were used; this is not physical-device pinch/touch or OS gesture testing.
+
+Existing historical validation follows below. Production deployment is verified separately after the commit; its SHA is available in Git history.
+
+---
+
 # Horizontal containment validation — 17 October 2026
 
 ## Findings and changes
