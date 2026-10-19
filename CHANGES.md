@@ -1,3 +1,17 @@
+# Selective copper restoration — 19 October 2026
+
+Focused colour-only correction from f1e38cd. Existing cleanup, pill controls, layout and all animation code are preserved.
+
+- Roast: muted copper gradient from #b8754e through #bf8058 to #cb936e, with #050505 typography, temperature, curve and labels. Existing ivory pill CTA retained.
+- Menu navigation transition: #b8754e with a black wordmark. The menu itself stays #050505.
+- Slow Burn: #cb936e caramel-copper product panel; other product panels retain their current treatments.
+- Hero, bean study, ritual, footer and primary page surfaces remain #050505; the ritual opening remains #000 and the handoff remains ivory.
+- No microcopy, decoration, markup, JavaScript, scroll ownership, input handling or geometry changes.
+
+Changed: src/refinement.css, dist/index.html, NOIR BEAN.html, CHANGES.md, VALIDATION.md. Desktop standalone HTML and source ZIP refreshed.
+
+---
+
 # Minimal black refinement — 18 October 2026
 
 Focused refinement of the existing site from eaf4bda; no new project or scroll-system replacement.

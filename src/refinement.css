@@ -1,12 +1,14 @@
 /* A quieter editorial finish. Scene geometry and scroll ownership stay in
    their original modules; these rules only govern colour and presentation. */
-:root{--ink:#050505;--cream:#f0ede5;--muted:#aaa69e;--amber:#ad8c6b;--line:rgba(240,237,229,.16)}
+:root{--ink:#050505;--cream:#f0ede5;--muted:#aaa69e;--amber:#ad8c6b;--copper:#b8754e;--copper-light:#cb936e;--line:rgba(240,237,229,.16)}
 html{scrollbar-color:#66635b #050505}
-body,.hero,.anatomy,.ritual,.ritual-stage,footer,.intro,.curtain{background:var(--ink)}
+body,.hero,.anatomy,.ritual,.ritual-stage,footer,.intro{background:var(--ink)}
 .ritual-darkness{background:#000}
 .grain{opacity:.012}
 .page-progress{height:1px;opacity:.55}
-.curtain span{color:var(--cream)}
+/* Warmth is reserved for the roast, a navigation interlude, and Slow Burn. */
+.curtain{background:var(--copper)}
+.curtain span{color:var(--ink)}
 .period{color:var(--cream)}
 
 /* Let the headline and sculptural bean carry the hero. */
@@ -72,15 +74,15 @@ dialog::backdrop{background:#000e8}
 .bean-facts .bean-note:after{display:none}
 .bean-note strong{margin:0;font-size:12px;font-weight:400;letter-spacing:.08em;color:var(--muted)}
 .bean-study{inset:20% 20% 12%}
-.roast{background:var(--ink);color:var(--cream);border-top:1px solid var(--line)}
+.roast{background:linear-gradient(115deg,var(--copper) 20%,#bf8058 70%,var(--copper-light));color:var(--ink);border-top:1px solid #05050520}
 .roast-panel{padding-top:80px}
-.temperature{color:var(--amber)}
-.roast-phase{border-color:var(--line);color:var(--muted)}
-.roast-phase i{background:var(--amber)}
-.graph-grid{stroke:#f0ede50d}
-.graph-curve,.graph-point{stroke:var(--amber)}
-.graph-point{fill:var(--amber)}
-.roast-labels{color:var(--muted)}
+.temperature{color:var(--ink)}
+.roast-phase{border-color:#05050540;color:var(--ink)}
+.roast-phase i{background:var(--ink)}
+.graph-grid{stroke:#05050518}
+.graph-curve,.graph-point{stroke:var(--ink)}
+.graph-point{fill:var(--ink)}
+.roast-labels{color:var(--ink)}
 .ritual-meta{font-size:10px}
 .ritual-meta .ritual-skip{margin-left:auto}
 .ritual-chapters{margin-left:auto}
@@ -95,7 +97,7 @@ dialog::backdrop{background:#000e8}
 .collection-count{margin-left:auto}
 .collection-nav{justify-content:space-between}
 .collection-nav .gallery-hint{font-size:9px;color:#656158}
-.product-two{background:#ddd6cb}
+.product-two{background:var(--copper-light)}
 .product-three{background:#c2c5ba}
 .cafe-caption p{font-size:14px;line-height:1.8}
 .visit-info .text-link{max-width:none}

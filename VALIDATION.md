@@ -1,3 +1,19 @@
+# Selective copper validation — 19 October 2026
+
+- Preserved the partial colour edits and completed visual review at 1366×768, 1440×900, 1920×1080, 390×844, 430×932 and portrait tablet 820×1180.
+- Document clientWidth/scrollWidth matched at all six sizes: 1351, 1425, 1905, 375, 415 and 805px respectively (15px reserved scrollbar). Page scrollX remained zero.
+- Roast gradient, Slow Burn panel and intentional navigation wipe visually inspected. Hero, menu surface, bean study and ritual stage remain rgb(5,5,5). The curtain wordmark is rgb(5,5,5).
+- Text contrast with #050505 is 5.52:1 on #b8754e, 6.25:1 on #bf8058 and 7.70:1 on #cb936e. The black/ivory pill text pair is 17.42:1.
+- Pill radius remains 999px. Existing content and removed decorative labels remain unchanged.
+- Mobile gallery advances to Slow Burn at scrollLeft 375px while page scrollX stays zero.
+- Roast/ritual boundary, forward collision (.3871), fast handoff (.9516), reverse collision (.3710), and mobile collision (.3635) visually checked. No unintended orange flash observed. The copper wipe is only the existing intentional menu navigation transition.
+- Browser warning/error logs empty. npm run build and npm run verify pass, including six-phase placement, finite geometry and deterministic reverse scrubbing.
+- Only colour presentation rules changed; no touch, zoom, Lenis, ScrollTrigger or WebGL changes.
+
+Production verification follows the release, with deployment commit recorded in Git and the release report. Earlier validation below is historical.
+
+---
+
 # Minimal black refinement validation — 18 October 2026
 
 Continued the existing partial edits. The source remains the Desktop NOIR BEAN Git project, connected to v1hxnga/cofee and Vercel coffee.
