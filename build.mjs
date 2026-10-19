@@ -9,3 +9,6 @@ const assets={'ritual-poster':['assets/ritual-poster.jpg','image/jpeg'],origin:[
 for(const[key,[file,mime]]of Object.entries(assets)){const data=`data:${mime};base64,${(await readFile(path.join(root,file))).toString('base64')}`;html=html.replaceAll(`{{${key}}}`,data);css=css.replaceAll(`{{${key}}}`,data);}
 html=html.replace('/*STYLES*/',css).replace('/*SCRIPT*/',()=>result.outputFiles[0].text.replaceAll('</script','<\\/script'));
 await mkdir(path.join(root,'dist'),{recursive:true});await writeFile(path.join(root,'dist/index.html'),html);console.log(`Built standalone website: ${(Buffer.byteLength(html)/1024/1024).toFixed(2)} MB`);
+
+await copyFile(path.join(root,'assets/social-preview-v2.jpg'),path.join(root,'dist/social-preview-v2.jpg'));
+await writeFile(path.join(root,'NOIR BEAN.html'),html);

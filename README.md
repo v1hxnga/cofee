@@ -69,3 +69,11 @@ The ritual opening now uses a dark overlay instead of the erroneous orange fill.
 The existing liquid system now includes gravity-directed jets, an irregular collapsing crown, reversible ballistic droplets, softer studio reflections and closer overhead framing. Settling splash sheets submerge beneath the coffee surface to prevent intersecting patches. Larger layered typography and separate portrait/landscape framing complete the editorial treatment.
 
 Build: `npm run build`. Validate: `npm run verify`. Run locally: `npm run preview`, then open http://127.0.0.1:4173. `dist/index.html` and `NOIR BEAN.html` contain the same standalone build.
+
+## Social preview
+
+The dedicated 1200×630 JPEG is `assets/social-preview-v2.jpg` (about 61 KB). The build copies it to `dist/social-preview-v2.jpg`, adds the authored metadata from `src/index.html`, and refreshes `NOIR BEAN.html`. The canonical and social-image URLs target the existing production alias.
+
+`node scripts/social-card.mjs` prepares an isolated card composer in `/tmp/noir-bean-social`. Serve that folder locally and capture a 1200×630 viewport after the fonts and bean render; export as JPEG at quality 88. The composer imports the existing bean renderer without altering the website.
+
+`npm run verify` checks the raw social tags, canonical, matching standalone export, copied image bytes, JPEG dimensions and size, alongside existing application and liquid checks.
